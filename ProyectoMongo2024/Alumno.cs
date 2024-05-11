@@ -46,5 +46,42 @@ namespace ProyectoMongo2024
         {
             _collection.InsertOne(alumno);
         }
+
+        public Alumno ConsultarPorMatricula(string matricula)
+        {
+            return _collection
+                .Find(a => a.Matricula == matricula)
+                .FirstOrDefault<Alumno>();
+        }
+
+        public Alumno ConsultarPorNombre(string nombre)
+        {
+            return _collection
+                .Find(a => a.Nombre == nombre)
+                .FirstOrDefault<Alumno>();
+        }
+
+        public void Actualizar(string matricula, Alumno alumno)
+        {
+            Alumno alumnoDB = ConsultarPorMatricula(matricula);
+            if (alumnoDB != null)
+            {
+                _collection.ReplaceOne(a => a.Id == alumnoDB.Id, alumno);
+            }
+        }
+
+        public void Eliminar(string matricula)
+        {
+            Alumno alumnoDB = ConsultarPorMatricula(matricula);
+            if (alumnoDB != null)
+            {
+                _collection.DeleteOne(a => a.Id == alumnoDB.Id);
+            }
+        }
+
+        public override string ToString()
+        {
+            return $"{Nombre} {Apellido}  matricula: {Matricula} grupo: {Grupo} ";
+        }
     }
 }
